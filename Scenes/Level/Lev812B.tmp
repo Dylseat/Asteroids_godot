@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://cubngndgiwn58"]
+
+[ext_resource type="PackedScene" uid="uid://cxvkkbwljb54x" path="res://Scenes/Player/Player.tscn" id="1_33ksg"]
+[ext_resource type="Script" path="res://Scenes/Level/Scripts/ProjectileFactory.gd" id="2_mjumy"]
+[ext_resource type="PackedScene" uid="uid://ecck2aj17lei" path="res://Scenes/Asteroid/Asteroid.tscn" id="3_70ufk"]
+
+[node name="Level" type="Node2D"]
+
+[node name="Player" parent="." instance=ExtResource("1_33ksg")]
+position = Vector2(234, 129)
+accel_factor = null
+rotation_accel_factor = null
+
+[node name="ProjectileFactory" type="Node2D" parent="."]
+script = ExtResource("2_mjumy")
+metadata/_edit_lock_ = true
+
+[node name="Asteroid" parent="." instance=ExtResource("3_70ufk")]
+position = Vector2(274, 104)
+
+[connection signal="projectile_fired" from="Player" to="ProjectileFactory" method="spawn_projectile"]

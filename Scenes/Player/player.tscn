@@ -9,6 +9,7 @@ radius = 6.0
 
 [node name="Player" type="CharacterBody2D"]
 z_index = 1
+collision_mask = 0
 script = ExtResource("1_hkv5j")
 projectile_scene = ExtResource("2_naf0a")
 

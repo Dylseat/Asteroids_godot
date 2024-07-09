@@ -1,4 +1,5 @@
 extends CharacterBody2D
+class_name Player
 
 var max_speed : float = 200.0
 var speed : float = 0.0
@@ -8,6 +9,7 @@ var last_direction := Vector2.ZERO
 @export_range(0.0, 1.0) var rotation_accel_factor : float = 0.1
 @export var projectile_scene : PackedScene
 signal projectile_fired(projectile)
+
 
 func _ready() -> void:
 	pass
@@ -45,3 +47,5 @@ func fire() -> void:
 	projectile.transform = global_transform
 	projectile_fired.emit(projectile)
 
+func destroy() -> void:
+	queue_free()
