@@ -9,6 +9,7 @@ var last_direction := Vector2.ZERO
 @export_range(0.0, 1.0) var rotation_accel_factor : float = 0.1
 @export var projectile_scene : PackedScene
 signal projectile_fired(projectile)
+signal destroyed
 
 
 func _ready() -> void:
@@ -48,4 +49,5 @@ func fire() -> void:
 	projectile_fired.emit(projectile)
 
 func destroy() -> void:
+	destroyed.emit()
 	queue_free()

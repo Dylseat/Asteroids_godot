@@ -26,12 +26,14 @@ enum SIZE{
 @export var asteroid_size_array : Array[AsteroidSize]
 
 signal size_changed
+signal destroyed
 
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		set_physics_process(false)
 		
 	size_changed.connect(update_size)
+	update_size()
 
 func _physics_process(delta: float) -> void:
 	var velocity = speed * direction * delta
@@ -52,4 +54,5 @@ func _on_body_entered(body: Node2D) -> void:
 		body.destroy()
 
 func destroy() -> void:
+	destroyed.emit()
 	queue_free()

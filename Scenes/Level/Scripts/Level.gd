@@ -3,6 +3,7 @@ class_name Level
 
 @onready var border_rect = %BorderRect
 @onready var asteroids_container: Node2D = $Asteroids
+@onready var gameover: Control = %GameOver
 
 @export var asteroid_scene : PackedScene
 @export var spawn_circle_radius : float = 350.0
@@ -13,7 +14,7 @@ var screen_height = ProjectSettings.get_setting("display/window/size/viewport_he
 var screen_size = Vector2(screen_width, screen_height)
 
 
-func spawn_asteroid() -> void:
+func spawn_asteroid_on_border() -> void:
 	var screen_center = screen_size / 2.0
 	var angle = deg_to_rad(randf_range(0.0, 360.0))
 	
@@ -25,18 +26,43 @@ func spawn_asteroid() -> void:
 	
 	point = point.clamp(top_left, down_right)
 	
-	var asteroid = asteroid_scene.instantiate()
-	asteroids_container.add_child(asteroid)
-	
 	var dir_to_center = point.direction_to(screen_center)
 	
 	var dir_rotation = randfn(0.0, deg_to_rad(asteroid_direction_variance))
-	asteroid.direction = dir_to_center.rotated(dir_rotation)
-	asteroid.position = point
+	var asteroid_dir = dir_to_center.rotated(dir_rotation)
+	var asteroid_size = randi_range(0, Asteroid.SIZE.size() - 1)
 	
-	asteroid.size = randi_range(0, Asteroid.SIZE.size() - 1)
+	spawn_asteroid(point, asteroid_dir, asteroid_size)
 
-func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_accept"):
-		spawn_asteroid()
+func spawn_asteroid(pos: Vector2, dir: Vector2, size: Asteroid.SIZE) -> void:
+	var asteroid = asteroid_scene.instantiate()
+	asteroids_container.add_child.call_deferred(asteroid)
+	
+	asteroid.direction = dir
+	asteroid.position = pos
+	
+	asteroid.size = size
+	asteroid.destroyed.connect(_on_asteroid_destroyed.bind(asteroid))
 
+func _on_asteroid_destroyed(asteroid: Asteroid) -> void:
+	if asteroid.size > 0:
+		var nb_spawn = randi_range(2, 3)
+		
+		for i in range(nb_spawn):
+			var rot_deg = 90.0 + randfn(0.0, deg_to_rad(asteroid_direction_variance))
+			var rdm_sign = [-1, 1].pick_random()
+			var rot = deg_to_rad(rot_deg * rdm_sign)
+			
+			var dir = asteroid.direction.rotated(rot)
+			
+			spawn_asteroid(asteroid.global_position, dir, asteroid.size - 1)
+
+func _on_spawn_timer_timeout() -> void:
+	spawn_asteroid_on_border()
+
+func _on_retry_button_pressed() -> void:
+	get_tree().reload_current_scene()
+
+
+func _on_player_destroyed() -> void:
+	gameover.show()

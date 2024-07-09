@@ -11,6 +11,7 @@ radius = 6.0
 z_index = 1
 collision_mask = 0
 script = ExtResource("1_hkv5j")
+rotation_accel_factor = 0.5
 projectile_scene = ExtResource("2_naf0a")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
