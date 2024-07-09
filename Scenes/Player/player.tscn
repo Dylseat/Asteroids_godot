@@ -1,17 +1,19 @@
-[gd_scene load_steps=4 format=3 uid="uid://cxvkkbwljb54x"]
+[gd_scene load_steps=5 format=3 uid="uid://cxvkkbwljb54x"]
 
-[ext_resource type="Texture2D" uid="uid://das4auhr2lctk" path="res://Scenes/Player/Sprites/Ship.png" id="1_4vr73"]
-[ext_resource type="Script" path="res://Scenes/Player/Scripts/player.gd" id="1_o5lfl"]
+[ext_resource type="Script" path="res://Scenes/Player/Scripts/player.gd" id="1_hkv5j"]
+[ext_resource type="Texture2D" uid="uid://das4auhr2lctk" path="res://Scenes/Player/Sprites/Ship.png" id="2_i1n5a"]
+[ext_resource type="PackedScene" uid="uid://dmsf20gtg6fox" path="res://Scenes/Projectile/Projectile.tscn" id="2_naf0a"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_soub3"]
 radius = 6.0
 
 [node name="Player" type="CharacterBody2D"]
-position = Vector2(238, 121)
-script = ExtResource("1_o5lfl")
+z_index = 1
+script = ExtResource("1_hkv5j")
+projectile_scene = ExtResource("2_naf0a")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_4vr73")
+texture = ExtResource("2_i1n5a")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-2, 0)

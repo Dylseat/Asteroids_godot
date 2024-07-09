@@ -6,7 +6,8 @@ var direction := Vector2.ZERO
 var last_direction := Vector2.ZERO
 @export_range(0.0, 1.0) var accel_factor : float = 0.1
 @export_range(0.0, 1.0) var rotation_accel_factor : float = 0.1
-
+@export var projectile_scene : PackedScene
+signal projectile_fired(projectile)
 
 func _ready() -> void:
 	pass
@@ -19,6 +20,9 @@ func _input(event: InputEvent) -> void:
 	direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	if direction != Vector2.ZERO:
 		last_direction = direction
+	
+	if event.is_action_pressed("fire"):
+		fire()
 
 func move() -> void:
 		# Move the ship
@@ -35,4 +39,9 @@ func rotate_toward_mouse() -> void:
 	var mouse_pos = get_global_mouse_position()
 	var angle = global_position.angle_to_point(mouse_pos)
 	rotation = lerp_angle(rotation, angle, rotation_accel_factor)
+
+func fire() -> void:
+	var projectile = projectile_scene.instantiate()
+	projectile.transform = global_transform
+	projectile_fired.emit(projectile)
 
